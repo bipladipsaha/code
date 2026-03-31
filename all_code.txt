@@ -1,0 +1,895 @@
+
+
+==================================================
+File: week1\week1_q1_numpy_operations.py
+==================================================
+
+# Week 1 Q1: NumPy array addition, subtraction, multiplication, division
+import numpy as np
+
+a = np.array([10, 20, 30, 40, 50])
+b = np.array([1, 2, 3, 4, 5])
+
+print("Array 1:", a)
+print("Array 2:", b)
+print("Addition:", a + b)
+print("Subtraction:", a - b)
+print("Multiplication:", a * b)
+print("Division:", a / b)
+
+
+==================================================
+File: week1\week1_q2_mean_median_std.py
+==================================================
+
+# Week 1 Q2: Mean, Median, Standard Deviation of NumPy array
+import numpy as np
+
+data = np.array([12, 15, 18, 22, 25, 30, 35, 40, 45, 50])
+
+print("Array:", data)
+print("Mean:", np.mean(data))
+print("Median:", np.median(data))
+print("Standard Deviation:", np.std(data))
+
+
+==================================================
+File: week1\week1_q3_pandas_dataframe.py
+==================================================
+
+# Week 1 Q3: Pandas DataFrame with student details
+import pandas as pd
+
+data = {
+    "Roll_No": [101, 102, 103, 104, 105],
+    "Name": ["Alice", "Bob", "Charlie", "Diana", "Eve"],
+    "Age": [20, 21, 19, 22, 20],
+    "Branch": ["CSE-AI", "CSE-AIML", "CSE-AI", "CSE-AIML", "CSE-AI"],
+    "CGPA": [9.2, 8.5, 9.0, 7.8, 8.9],
+}
+
+df = pd.DataFrame(data)
+
+print("Student DataFrame:")
+print(df)
+print("\nDataFrame Info:")
+print(df.info())
+print("\nStatistics:")
+print(df.describe())
+
+
+==================================================
+File: week1\week1_q4_read_csv.py
+==================================================
+
+# Week 1 Q4: Read CSV file and display selected columns
+import pandas as pd
+import os
+
+# Create a sample CSV file
+data = {
+    "Roll_No": [101, 102, 103, 104, 105],
+    "Name": ["Alice", "Bob", "Charlie", "Diana", "Eve"],
+    "Age": [20, 21, 19, 22, 20],
+    "Branch": ["CSE-AI", "CSE-AIML", "CSE-AI", "CSE-AIML", "CSE-AI"],
+    "Marks": [85, 72, 90, 65, 88],
+}
+
+csv_path = os.path.join(os.path.dirname(__file__), "students.csv")
+pd.DataFrame(data).to_csv(csv_path, index=False)
+
+# Read and display
+df = pd.read_csv(csv_path)
+print("Full DataFrame:")
+print(df)
+print("\nSelected Columns (Name, Branch, Marks):")
+print(df[["Name", "Branch", "Marks"]])
+
+
+==================================================
+File: week1\week1_q5_filter_by_marks.py
+==================================================
+
+# Week 1 Q5: Filter students who scored more than a given mark
+import pandas as pd
+
+data = {
+    "Roll_No": [101, 102, 103, 104, 105, 106],
+    "Name": ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank"],
+    "Marks": [85, 72, 90, 65, 88, 55],
+}
+
+df = pd.DataFrame(data)
+print("All Students:")
+print(df)
+
+threshold = int(input("\nEnter minimum marks: "))
+filtered = df[df["Marks"] > threshold]
+print(f"\nStudents scoring more than {threshold}:")
+print(filtered)
+
+
+==================================================
+File: week1\week1_q6_missing_values.py
+==================================================
+
+# Week 1 Q6: Identify missing values and replace with column mean
+import pandas as pd
+import numpy as np
+
+data = {
+    "Name": ["Alice", "Bob", "Charlie", "Diana", "Eve"],
+    "Maths": [85, np.nan, 90, 65, np.nan],
+    "Science": [78, 82, np.nan, 70, 88],
+    "English": [np.nan, 75, 80, np.nan, 92],
+}
+
+df = pd.DataFrame(data)
+print("Original DataFrame:")
+print(df)
+
+print("\nMissing values per column:")
+print(df.isnull().sum())
+
+# Replace missing values with column mean
+numeric_cols = df.select_dtypes(include=[np.number]).columns
+df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+
+print("\nAfter replacing with mean:")
+print(df)
+
+
+==================================================
+File: week2\week2_q10_mean_var_std.py
+==================================================
+
+# Week 2 Q10: Mean, variance, standard deviation of a list
+n = int(input("How many numbers? "))
+numbers = []
+for i in range(n):
+    numbers.append(float(input(f"Enter number {i+1}: ")))
+
+print("Data:", numbers)
+
+mean = sum(numbers) / len(numbers)
+variance = sum((x - mean)**2 for x in numbers) / len(numbers)
+std_dev = variance ** 0.5
+
+print("Mean:", mean)
+print("Variance:", variance)
+print("Standard Deviation:", std_dev)
+
+
+==================================================
+File: week2\week2_q1_basic_arithmetic.py
+==================================================
+
+# Week 2 Q1: Addition, subtraction, multiplication, division of two numbers
+num1 = float(input("Enter first number: "))
+num2 = float(input("Enter second number: "))
+
+print("Addition:", num1 + num2)
+print("Subtraction:", num1 - num2)
+print("Multiplication:", num1 * num2)
+if num2 != 0:
+    print("Division:", num1 / num2)
+else:
+    print("Division: Cannot divide by zero")
+
+
+==================================================
+File: week2\week2_q2_square_cube.py
+==================================================
+
+# Week 2 Q2: Square and cube of a number
+num = float(input("Enter a number: "))
+
+print("Square:", num ** 2)
+print("Cube:", num ** 3)
+
+
+==================================================
+File: week2\week2_q3_average_n_numbers.py
+==================================================
+
+# Week 2 Q3: Average of N numbers
+n = int(input("How many numbers? "))
+total = 0
+
+for i in range(n):
+    num = float(input(f"Enter number {i+1}: "))
+    total += num
+
+print("Average:", total / n)
+
+
+==================================================
+File: week2\week2_q4_simple_interest.py
+==================================================
+
+# Week 2 Q4: Simple Interest = (P * R * T) / 100
+P = float(input("Enter Principal: "))
+R = float(input("Enter Rate: "))
+T = float(input("Enter Time (years): "))
+
+SI = (P * R * T) / 100
+print("Simple Interest:", SI)
+
+
+==================================================
+File: week2\week2_q5_rectangle.py
+==================================================
+
+# Week 2 Q5: Area and perimeter of a rectangle
+length = float(input("Enter length: "))
+breadth = float(input("Enter breadth: "))
+
+print("Area:", length * breadth)
+print("Perimeter:", 2 * (length + breadth))
+
+
+==================================================
+File: week2\week2_q6_modulus_floor_div.py
+==================================================
+
+# Week 2 Q6: Modulus (%) and Floor Division (//) operators
+a = int(input("Enter first number: "))
+b = int(input("Enter second number: "))
+
+print(f"{a} % {b} =", a % b)
+print(f"{a} // {b} =", a // b)
+
+# More examples
+print("\nMore examples:")
+print("17 % 5 =", 17 % 5)
+print("17 // 5 =", 17 // 5)
+print("25 % 7 =", 25 % 7)
+print("25 // 7 =", 25 // 7)
+
+
+==================================================
+File: week2\week2_q7_celsius_to_fahrenheit.py
+==================================================
+
+# Week 2 Q7: Celsius to Fahrenheit
+celsius = float(input("Enter temperature in Celsius: "))
+fahrenheit = (celsius * 9/5) + 32
+print(f"{celsius}°C = {fahrenheit}°F")
+
+
+==================================================
+File: week2\week2_q8_euclidean_distance.py
+==================================================
+
+# Week 2 Q8: Euclidean distance between two points
+import math
+
+x1 = float(input("Enter x1: "))
+y1 = float(input("Enter y1: "))
+x2 = float(input("Enter x2: "))
+y2 = float(input("Enter y2: "))
+
+distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+print("Euclidean Distance:", distance)
+
+
+==================================================
+File: week2\week2_q9_weighted_sum_neuron.py
+==================================================
+
+# Week 2 Q9: Weighted sum of inputs (artificial neuron)
+inputs = [1.0, 0.5, 0.8, 0.2]
+weights = [0.4, 0.6, 0.3, 0.9]
+bias = 0.1
+
+print("Inputs:", inputs)
+print("Weights:", weights)
+print("Bias:", bias)
+
+weighted_sum = sum(w * x for w, x in zip(weights, inputs))
+output = weighted_sum + bias
+
+print("Weighted Sum:", weighted_sum)
+print("Output (with bias):", output)
+
+# Step activation
+activation = 1 if output >= 0.5 else 0
+print("Activation (threshold=0.5):", activation)
+
+
+==================================================
+File: week3\week3_q1_water_jug.py
+==================================================
+
+# Week 3 Q1: Water Jug Problem using BFS
+from collections import deque
+
+def water_jug_bfs(cap_a, cap_b, target):
+    visited = set()
+    queue = deque([((0, 0), [(0, 0)])])
+    visited.add((0, 0))
+
+    while queue:
+        (a, b), path = queue.popleft()
+        if a == target or b == target:
+            return path
+
+        next_states = [
+            (cap_a, b),       # Fill A
+            (a, cap_b),       # Fill B
+            (0, b),           # Empty A
+            (a, 0),           # Empty B
+            (a - min(a, cap_b - b), b + min(a, cap_b - b)),  # Pour A->B
+            (a + min(b, cap_a - a), b - min(b, cap_a - a)),  # Pour B->A
+        ]
+
+        for state in next_states:
+            if state not in visited:
+                visited.add(state)
+                queue.append((state, path + [state]))
+    return None
+
+# Solve: 4L jug, 3L jug, measure 2L
+path = water_jug_bfs(4, 3, 2)
+print("Water Jug Problem: Measure 2L using 4L and 3L jugs")
+print("Solution:")
+for i, (a, b) in enumerate(path):
+    print(f"  Step {i}: Jug A = {a}L, Jug B = {b}L")
+
+
+==================================================
+File: week3\week3_q2_bfs_dfs_social_network.py
+==================================================
+
+# Week 3 Q2: BFS and DFS on a social network graph
+from collections import defaultdict, deque
+
+# Sample social network graph
+graph = defaultdict(set)
+edges = [
+    (0,1), (0,2), (0,3), (1,2), (1,4),
+    (2,3), (2,5), (3,5), (4,6), (4,7),
+    (5,6), (6,7), (6,8), (7,8), (7,9), (8,9),
+]
+for u, v in edges:
+    graph[u].add(v)
+    graph[v].add(u)
+
+print(f"Graph: {len(graph)} nodes, {len(edges)} edges\n")
+
+# BFS
+def bfs(graph, start):
+    visited = set([start])
+    queue = deque([start])
+    order = []
+    while queue:
+        node = queue.popleft()
+        order.append(node)
+        for neighbor in sorted(graph[node]):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return order
+
+# DFS
+def dfs(graph, start):
+    visited = set()
+    stack = [start]
+    order = []
+    while stack:
+        node = stack.pop()
+        if node not in visited:
+            visited.add(node)
+            order.append(node)
+            for neighbor in sorted(graph[node], reverse=True):
+                if neighbor not in visited:
+                    stack.append(neighbor)
+    return order
+
+print("BFS order:", bfs(graph, 0))
+print("DFS order:", dfs(graph, 0))
+
+
+==================================================
+File: week4\week4_q1_a_star_search.py
+==================================================
+
+# Week 4 Q1: A* Search Algorithm on a weighted graph
+import heapq
+
+graph = {
+    "Arad":       [("Sibiu", 140), ("Zerind", 75), ("Timisoara", 118)],
+    "Zerind":     [("Arad", 75), ("Oradea", 71)],
+    "Oradea":     [("Zerind", 71), ("Sibiu", 151)],
+    "Sibiu":      [("Arad", 140), ("Fagaras", 99), ("RimnicuVilcea", 80)],
+    "Timisoara":  [("Arad", 118), ("Lugoj", 111)],
+    "Lugoj":      [("Timisoara", 111), ("Mehadia", 70)],
+    "Mehadia":    [("Lugoj", 70), ("Drobeta", 75)],
+    "Drobeta":    [("Mehadia", 75), ("Craiova", 120)],
+    "Craiova":    [("Drobeta", 120), ("RimnicuVilcea", 146), ("Pitesti", 138)],
+    "RimnicuVilcea": [("Sibiu", 80), ("Craiova", 146), ("Pitesti", 97)],
+    "Fagaras":    [("Sibiu", 99), ("Bucharest", 211)],
+    "Pitesti":    [("RimnicuVilcea", 97), ("Bucharest", 101)],
+    "Bucharest":  [("Fagaras", 211), ("Pitesti", 101)],
+}
+
+heuristic = {
+    "Arad": 366, "Zerind": 374, "Oradea": 380, "Sibiu": 253,
+    "Timisoara": 329, "Lugoj": 244, "Mehadia": 241, "Drobeta": 242,
+    "Craiova": 160, "RimnicuVilcea": 193, "Fagaras": 176,
+    "Pitesti": 100, "Bucharest": 0,
+}
+
+def a_star(graph, heuristic, start, goal):
+    heap = [(heuristic[start], start, [start], 0)]
+    visited = set()
+    while heap:
+        f, node, path, g = heapq.heappop(heap)
+        if node == goal:
+            return path, g
+        if node in visited:
+            continue
+        visited.add(node)
+        for neighbor, cost in graph.get(node, []):
+            if neighbor not in visited:
+                new_g = g + cost
+                heapq.heappush(heap, (new_g + heuristic[neighbor], neighbor, path + [neighbor], new_g))
+    return None, float("inf")
+
+path, cost = a_star(graph, heuristic, "Arad", "Bucharest")
+print("A* Search: Arad to Bucharest")
+print("Path:", " -> ".join(path))
+print("Total Cost:", cost)
+
+
+==================================================
+File: week4\week4_q2_n_queens.py
+==================================================
+
+# Week 4 Q2: N-Queens Problem using Backtracking
+
+def is_safe(board, row, col, n):
+    for i in range(row):
+        if board[i][col] == 1:
+            return False
+    i, j = row-1, col-1
+    while i >= 0 and j >= 0:
+        if board[i][j] == 1:
+            return False
+        i -= 1; j -= 1
+    i, j = row-1, col+1
+    while i >= 0 and j < n:
+        if board[i][j] == 1:
+            return False
+        i -= 1; j += 1
+    return True
+
+def solve(board, row, n):
+    if row == n:
+        return True
+    for col in range(n):
+        if is_safe(board, row, col, n):
+            board[row][col] = 1
+            if solve(board, row + 1, n):
+                return True
+            board[row][col] = 0
+    return False
+
+n = int(input("Enter N: "))
+board = [[0]*n for _ in range(n)]
+
+if solve(board, 0, n):
+    print(f"\n{n}-Queens Solution:")
+    for row in board:
+        print(" ".join("Q" if x else "." for x in row))
+else:
+    print("No solution exists.")
+
+
+==================================================
+File: week5\week5_q1_minimax.py
+==================================================
+
+# Week 5 Q1: Minimax Algorithm
+import math
+
+def minimax(depth, index, is_max, scores, max_depth):
+    if depth == max_depth:
+        return scores[index]
+
+    if is_max:
+        return max(minimax(depth+1, index*2, False, scores, max_depth),
+                   minimax(depth+1, index*2+1, False, scores, max_depth))
+    else:
+        return min(minimax(depth+1, index*2, True, scores, max_depth),
+                   minimax(depth+1, index*2+1, True, scores, max_depth))
+
+scores = [3, 5, 2, 9, 12, 5, 23, 23]
+max_depth = int(math.log2(len(scores)))
+
+result = minimax(0, 0, True, scores, max_depth)
+print("Scores:", scores)
+print("Optimal value for MAX:", result)
+
+
+==================================================
+File: week5\week5_q2_alpha_beta_pruning.py
+==================================================
+
+# Week 5 Q2: Alpha-Beta Pruning
+import math
+
+def alpha_beta(depth, index, is_max, scores, max_depth, alpha, beta):
+    if depth == max_depth:
+        return scores[index]
+
+    if is_max:
+        best = -math.inf
+        for i in range(2):
+            val = alpha_beta(depth+1, index*2+i, False, scores, max_depth, alpha, beta)
+            best = max(best, val)
+            alpha = max(alpha, best)
+            if beta <= alpha:
+                break
+        return best
+    else:
+        best = math.inf
+        for i in range(2):
+            val = alpha_beta(depth+1, index*2+i, True, scores, max_depth, alpha, beta)
+            best = min(best, val)
+            beta = min(beta, best)
+            if beta <= alpha:
+                break
+        return best
+
+scores = [3, 5, 2, 9, 12, 5, 23, 23]
+max_depth = int(math.log2(len(scores)))
+
+result = alpha_beta(0, 0, True, scores, max_depth, -math.inf, math.inf)
+print("Scores:", scores)
+print("Optimal value (Alpha-Beta):", result)
+
+
+==================================================
+File: week6\week6_q1_load_arff.py
+==================================================
+
+# Week 6 Q1: Load and read an ARFF dataset
+import os
+
+def parse_arff(filepath):
+    attributes = []
+    data = []
+    reading_data = False
+    with open(filepath, "r") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("%"):
+                continue
+            if line.lower().startswith("@attribute"):
+                parts = line.split(None, 2)
+                attributes.append((parts[1], parts[2] if len(parts) > 2 else ""))
+            elif line.lower().startswith("@data"):
+                reading_data = True
+            elif reading_data:
+                data.append(line.split(","))
+    return attributes, data
+
+# Create sample ARFF if Weka not installed
+weka_path = r"C:\Program Files\Weka-3-9-6\data\weather.nominal.arff"
+
+if os.path.exists(weka_path):
+    filepath = weka_path
+else:
+    filepath = os.path.join(os.path.dirname(__file__), "weather.arff")
+    with open(filepath, "w") as f:
+        f.write("""@RELATION weather
+@ATTRIBUTE outlook {sunny, overcast, rainy}
+@ATTRIBUTE temperature {hot, mild, cool}
+@ATTRIBUTE humidity {high, normal}
+@ATTRIBUTE windy {TRUE, FALSE}
+@ATTRIBUTE play {yes, no}
+@DATA
+sunny,hot,high,FALSE,no
+sunny,hot,high,TRUE,no
+overcast,hot,high,FALSE,yes
+rainy,mild,high,FALSE,yes
+rainy,cool,normal,FALSE,yes
+rainy,cool,normal,TRUE,no
+overcast,cool,normal,TRUE,yes
+sunny,mild,high,FALSE,no
+sunny,cool,normal,FALSE,yes
+rainy,mild,normal,FALSE,yes
+sunny,mild,normal,TRUE,yes
+overcast,mild,high,TRUE,yes
+overcast,hot,normal,FALSE,yes
+rainy,mild,high,TRUE,no
+""")
+
+attributes, data = parse_arff(filepath)
+
+print("Attributes:")
+for name, atype in attributes:
+    print(f"  {name}: {atype}")
+print(f"\nTarget Variable: {attributes[-1][0]}")
+print(f"Number of instances: {len(data)}")
+print("\nFirst 5 rows:")
+for row in data[:5]:
+    print("  ", row)
+
+
+==================================================
+File: week6\week6_q2_normalization_standardization.py
+==================================================
+
+# Week 6 Q2: Min-Max Normalization vs Z-Score Standardization
+import numpy as np
+
+data = np.array([15, 22, 35, 40, 55, 60, 78, 85, 90, 100], dtype=float)
+print("Original Data:", data)
+
+# Min-Max Normalization: X' = (X - Xmin) / (Xmax - Xmin)
+normalized = (data - data.min()) / (data.max() - data.min())
+print("\nMin-Max Normalized:", np.round(normalized, 4))
+print("  Range: [0, 1]")
+
+# Z-Score Standardization: X' = (X - mean) / std
+standardized = (data - data.mean()) / data.std()
+print("\nZ-Score Standardized:", np.round(standardized, 4))
+print("  Mean:", round(standardized.mean(), 4))
+print("  Std:", round(standardized.std(), 4))
+
+
+==================================================
+File: week7\week7_q1_missing_data.py
+==================================================
+
+# Week 7 Q1: Handle missing data using mean imputation
+import pandas as pd
+import numpy as np
+
+# Sample diabetes-like dataset with missing values
+data = {
+    "Pregnancies": [6, 1, 8, 1, 0],
+    "Glucose": [148, 85, np.nan, 89, 137],
+    "BloodPressure": [72, 66, 64, np.nan, 40],
+    "SkinThickness": [35, np.nan, 0, 23, 35],
+    "Insulin": [0, 0, np.nan, 94, 168],
+    "BMI": [33.6, 26.6, 23.3, 28.1, np.nan],
+    "Age": [50, 31, 32, 21, 33],
+    "Outcome": [1, 0, 1, 0, 1],
+}
+
+df = pd.DataFrame(data)
+print("Original Data:")
+print(df)
+
+print("\nMissing values:")
+print(df.isnull().sum())
+
+# Replace missing values with column mean
+numeric_cols = df.select_dtypes(include=[np.number]).columns
+df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+
+print("\nAfter mean imputation:")
+print(df)
+
+print("\nMissing values after fix:")
+print(df.isnull().sum())
+
+
+==================================================
+File: week7\week7_q2_data_visualization.py
+==================================================
+
+# Week 7 Q2: Data Visualization - Histogram, Scatter, Box, Bar, Line, Heatmap
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Sample data
+np.random.seed(42)
+df = pd.DataFrame({
+    "Age": np.random.randint(18, 65, 50),
+    "Income": np.random.normal(50000, 15000, 50).astype(int),
+    "Score": np.random.randint(1, 100, 50),
+    "Experience": np.random.randint(0, 30, 50),
+})
+
+fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+
+# 1. Histogram
+axes[0,0].hist(df["Income"], bins=10, color="skyblue", edgecolor="black")
+axes[0,0].set_title("Histogram - Income")
+
+# 2. Scatter Plot
+axes[0,1].scatter(df["Age"], df["Score"], color="green")
+axes[0,1].set_title("Scatter - Age vs Score")
+axes[0,1].set_xlabel("Age"); axes[0,1].set_ylabel("Score")
+
+# 3. Box Plot
+axes[0,2].boxplot([df["Age"], df["Experience"]], labels=["Age", "Experience"])
+axes[0,2].set_title("Box Plot")
+
+# 4. Bar Chart
+age_groups = pd.cut(df["Age"], bins=[17,25,35,45,55,65], labels=["18-25","26-35","36-45","46-55","56-65"])
+axes[1,0].bar(age_groups.value_counts().sort_index().index.astype(str), age_groups.value_counts().sort_index().values, color="coral")
+axes[1,0].set_title("Bar Chart - Age Groups")
+
+# 5. Line Chart
+avg_income = df.groupby("Experience")["Income"].mean()
+axes[1,1].plot(avg_income.index, avg_income.values, marker="o", color="purple")
+axes[1,1].set_title("Line Chart - Income by Experience")
+
+# 6. Heatmap
+sns.heatmap(df.corr(), annot=True, cmap="coolwarm", ax=axes[1,2])
+axes[1,2].set_title("Heatmap - Correlation")
+
+plt.tight_layout()
+plt.savefig("visualizations.png", dpi=100)
+print("Plots saved to visualizations.png")
+plt.show()
+
+
+==================================================
+File: week8\week8_q1_compare_classifiers.py
+==================================================
+
+# Week 8 Q1: Compare Decision Tree, Random Forest, Naive Bayes, KNN
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# Load data
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+scaler = StandardScaler()
+X_train_s = scaler.fit_transform(X_train)
+X_test_s = scaler.transform(X_test)
+
+classifiers = {
+    "Decision Tree": DecisionTreeClassifier(random_state=42),
+    "Random Forest": RandomForestClassifier(random_state=42),
+    "Naive Bayes":   GaussianNB(),
+    "KNN":           KNeighborsClassifier(n_neighbors=5),
+}
+
+print(f"{'Classifier':<16} {'Accuracy':<10} {'Precision':<10} {'Recall':<10} {'F1-Score':<10}")
+print("-" * 56)
+
+for name, clf in classifiers.items():
+    clf.fit(X_train_s, y_train)
+    y_pred = clf.predict(X_test_s)
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred, average="weighted")
+    rec = recall_score(y_test, y_pred, average="weighted")
+    f1 = f1_score(y_test, y_pred, average="weighted")
+    print(f"{name:<16} {acc:<10.4f} {prec:<10.4f} {rec:<10.4f} {f1:<10.4f}")
+
+
+==================================================
+File: week8\week8_q2_svm_kernels.py
+==================================================
+
+# Week 8 Q2: SVM with different kernel functions
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# Load data
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+kernels = ["linear", "poly", "rbf", "sigmoid"]
+
+print(f"{'Kernel':<12} {'Accuracy':<10} {'Precision':<10} {'Recall':<10} {'F1-Score':<10}")
+print("-" * 52)
+
+for kernel in kernels:
+    svm = SVC(kernel=kernel, random_state=42)
+    svm.fit(X_train, y_train)
+    y_pred = svm.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred, average="weighted")
+    rec = recall_score(y_test, y_pred, average="weighted")
+    f1 = f1_score(y_test, y_pred, average="weighted")
+    print(f"{kernel:<12} {acc:<10.4f} {prec:<10.4f} {rec:<10.4f} {f1:<10.4f}")
+
+
+==================================================
+File: week9\week9_q1_knn.py
+==================================================
+
+# Week 9 Q1: K-Nearest Neighbor (KNN) Algorithm
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# Load data
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Test different K values
+print("K vs Accuracy:")
+best_k, best_acc = 1, 0
+for k in range(1, 11):
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, y_train)
+    acc = accuracy_score(y_test, knn.predict(X_test))
+    print(f"  K={k}: {acc:.4f}")
+    if acc > best_acc:
+        best_k, best_acc = k, acc
+
+# Final model with best K
+print(f"\nBest K = {best_k}, Accuracy = {best_acc:.4f}")
+knn = KNeighborsClassifier(n_neighbors=best_k)
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+
+==================================================
+File: week9\week9_q2_mlp_backpropagation.py
+==================================================
+
+# Week 9 Q2: Multilayer Perceptron (MLP) with Backpropagation
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+# Load data
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Train MLP
+mlp = MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=300, random_state=42)
+mlp.fit(X_train, y_train)
+
+y_pred = mlp.predict(X_test)
+print("MLP Accuracy:", accuracy_score(y_test, y_pred))
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+# Plot loss curve
+plt.figure(figsize=(8, 4))
+plt.plot(mlp.loss_curve_, color="coral")
+plt.title("MLP Training Loss")
+plt.xlabel("Iterations")
+plt.ylabel("Loss")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("mlp_loss.png", dpi=100)
+print("Loss plot saved to mlp_loss.png")
+plt.show()
