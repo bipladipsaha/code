@@ -1,0 +1,1993 @@
+================================================================================
+1. Given a sorted array and a number X, search two elements of the array such that their sum is X. Expected time complexity is O(n).
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+void findTwoSum(int arr[], int n, int X) {
+    int left = 0, right = n - 1;
+    while (left < right) {
+        int sum = arr[left] + arr[right];
+        if (sum == X) {
+            printf("Elements found: %d and %d\n", arr[left], arr[right]);
+            return;
+        } else if (sum < X) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    printf("No two elements sum up to %d\n", X);
+}
+
+int main() {
+    int arr[] = {1, 2, 4, 5, 7, 11};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int X = 9;
+    printf("Array: ");
+    for(int i=0; i<n; i++) printf("%d ", arr[i]);
+    printf("\nTarget sum: %d\n", X);
+    findTwoSum(arr, n, X);
+    return 0;
+}
+
+
+--- Python Implementation ---
+def find_two_sum(arr, x):
+    left, right = 0, len(arr) - 1
+    while left < right:
+        current_sum = arr[left] + arr[right]
+        if current_sum == x:
+            print(f"Elements found: {arr[left]} and {arr[right]}")
+            return
+        elif current_sum < x:
+            left += 1
+        else:
+            right -= 1
+    print(f"No two elements sum up to {x}")
+
+if __name__ == "__main__":
+    arr = [1, 2, 4, 5, 7, 11]
+    X = 9
+    print(f"Array: {arr}\nTarget sum: {X}")
+    find_two_sum(arr, X)
+
+
+================================================================================
+2. Implement Binary Search using Divide and Conquer.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+int binarySearch(int arr[], int left, int right, int x) {
+    if (right >= left) {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] == x)
+            return mid;
+        if (arr[mid] > x)
+            return binarySearch(arr, left, mid - 1, x);
+        return binarySearch(arr, mid + 1, right, x);
+    }
+    return -1;
+}
+
+int main() {
+    int arr[] = {2, 3, 4, 10, 40};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int x = 10;
+    int result = binarySearch(arr, 0, n - 1, x);
+    if (result == -1)
+        printf("Element is not present in array\n");
+    else
+        printf("Element is present at index %d\n", result);
+    return 0;
+}
+
+
+--- Python Implementation ---
+def binary_search(arr, left, right, x):
+    if right >= left:
+        mid = left + (right - left) // 2
+        if arr[mid] == x:
+            return mid
+        elif arr[mid] > x:
+            return binary_search(arr, left, mid - 1, x)
+        else:
+            return binary_search(arr, mid + 1, right, x)
+    return -1
+
+if __name__ == "__main__":
+    arr = [2, 3, 4, 10, 40]
+    x = 10
+    result = binary_search(arr, 0, len(arr)-1, x)
+    if result != -1:
+        print(f"Element is present at index {result}")
+    else:
+        print("Element is not present in array")
+
+
+================================================================================
+3. Apply Binary Search on 2D NxM array (A) having numbers stored in non-decreasing order under row-major scanning.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+void search2D(int r, int c, int matrix[r][c], int target) {
+    int left = 0, right = r * c - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        int mid_val = matrix[mid / c][mid % c];
+        if (mid_val == target) {
+            printf("Found at row %d, col %d\n", mid / c, mid % c);
+            return;
+        } else if (mid_val < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    printf("Element not found.\n");
+}
+
+int main() {
+    int matrix[3][4] = {
+        {1, 3, 5, 7},
+        {10, 11, 16, 20},
+        {23, 30, 34, 60}
+    };
+    int target = 3;
+    search2D(3, 4, matrix, target);
+    return 0;
+}
+
+
+--- Python Implementation ---
+def search_2d(matrix, target):
+    if not matrix or not matrix[0]:
+        return False
+    rows, cols = len(matrix), len(matrix[0])
+    left, right = 0, rows * cols - 1
+    
+    while left <= right:
+        mid = left + (right - left) // 2
+        mid_val = matrix[mid // cols][mid % cols]
+        
+        if mid_val == target:
+            print(f"Found at row {mid // cols}, col {mid % cols}")
+            return True
+        elif mid_val < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+            
+    print("Element not found")
+    return False
+
+if __name__ == "__main__":
+    matrix = [
+        [1, 3, 5, 7],
+        [10, 11, 16, 20],
+        [23, 30, 34, 60]
+    ]
+    target = 3
+    search_2d(matrix, target)
+
+
+================================================================================
+4. A Bitonic Sequence is a sequence of numbers which is first strictly increasing then after a point strictly decreasing. A Bitonic Point is a point in the bitonic sequence before which elements are strictly increasing and after which elements are strictly decreasing. Find bitonic points in a bitonic sequence.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+int findBitonicPoint(int arr[], int left, int right) {
+    if (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] > arr[mid - 1] && arr[mid] > arr[mid + 1]) {
+            return arr[mid];
+        }
+        if (arr[mid] > arr[mid - 1] && arr[mid] < arr[mid + 1]) {
+            return findBitonicPoint(arr, mid + 1, right);
+        } else {
+            return findBitonicPoint(arr, left, mid - 1);
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int arr[] = {1, 15, 25, 45, 42, 21, 17, 12, 11};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int bitonic = findBitonicPoint(arr, 1, n - 2);
+    printf("The bitonic point is %d\n", bitonic);
+    return 0;
+}
+
+
+--- Python Implementation ---
+def find_bitonic_point(arr, left, right):
+    if left <= right:
+        mid = left + (right - left) // 2
+        
+        if arr[mid] > arr[mid - 1] and arr[mid] > arr[mid + 1]:
+            return arr[mid]
+            
+        if arr[mid] > arr[mid - 1] and arr[mid] < arr[mid + 1]:
+            return find_bitonic_point(arr, mid + 1, right)
+        else:
+            return find_bitonic_point(arr, left, mid - 1)
+            
+    return -1
+
+if __name__ == "__main__":
+    arr = [1, 15, 25, 45, 42, 21, 17, 12, 11]
+    bitonic = find_bitonic_point(arr, 1, len(arr) - 2)
+    print(f"The bitonic point is {bitonic}")
+
+
+================================================================================
+5. Apply Merge Sort to count inversion pairs in an array. Two elements a[i] and a[j] form an inversion pair if a[i] > a[j] and i < j. Example: The sequence 2, 4, 1, 3, 5 has three inversions (2, 1), (4, 1), (4, 3).
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+int mergeAndCount(int arr[], int temp[], int left, int mid, int right) {
+    int i = left, j = mid, k = left;
+    int inv_count = 0;
+
+    while ((i <= mid - 1) && (j <= right)) {
+        if (arr[i] <= arr[j]) {
+            temp[k++] = arr[i++];
+        } else {
+            temp[k++] = arr[j++];
+            inv_count = inv_count + (mid - i);
+        }
+    }
+
+    while (i <= mid - 1)
+        temp[k++] = arr[i++];
+
+    while (j <= right)
+        temp[k++] = arr[j++];
+
+    for (i = left; i <= right; i++)
+        arr[i] = temp[i];
+
+    return inv_count;
+}
+
+int mergeSortAndCount(int arr[], int temp[], int left, int right) {
+    int mid, inv_count = 0;
+    if (right > left) {
+        mid = (right + left) / 2;
+        inv_count += mergeSortAndCount(arr, temp, left, mid);
+        inv_count += mergeSortAndCount(arr, temp, mid + 1, right);
+        inv_count += mergeAndCount(arr, temp, left, mid + 1, right);
+    }
+    return inv_count;
+}
+
+int main() {
+    int arr[] = {2, 4, 1, 3, 5};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int temp[n];
+    int ans = mergeSortAndCount(arr, temp, 0, n - 1);
+    printf("Number of inversions are %d \n", ans);
+    return 0;
+}
+
+
+--- Python Implementation ---
+def merge_and_count(arr, temp, left, mid, right):
+    i = left
+    j = mid
+    k = left
+    inv_count = 0
+    
+    while i <= mid - 1 and j <= right:
+        if arr[i] <= arr[j]:
+            temp[k] = arr[i]
+            k += 1
+            i += 1
+        else:
+            temp[k] = arr[j]
+            k += 1
+            j += 1
+            inv_count += (mid - i)
+            
+    while i <= mid - 1:
+        temp[k] = arr[i]
+        k += 1
+        i += 1
+        
+    while j <= right:
+        temp[k] = arr[j]
+        k += 1
+        j += 1
+        
+    for i in range(left, right + 1):
+        arr[i] = temp[i]
+        
+    return inv_count
+
+def merge_sort_and_count(arr, temp, left, right):
+    inv_count = 0
+    if left < right:
+        mid = (left + right) // 2
+        inv_count += merge_sort_and_count(arr, temp, left, mid)
+        inv_count += merge_sort_and_count(arr, temp, mid + 1, right)
+        inv_count += merge_and_count(arr, temp, left, mid + 1, right)
+    return inv_count
+
+if __name__ == "__main__":
+    arr = [2, 4, 1, 3, 5]
+    temp = [0]*len(arr)
+    ans = merge_sort_and_count(arr, temp, 0, len(arr) - 1)
+    print(f"Number of inversions are {ans}")
+
+
+================================================================================
+6. Implement a greedy algorithm to solve the fractional knapsack problem.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Item {
+    int value, weight;
+};
+
+int cmp(const void *a, const void *b) {
+    struct Item *item1 = (struct Item *)a;
+    struct Item *item2 = (struct Item *)b;
+    double r1 = (double)item1->value / item1->weight;
+    double r2 = (double)item2->value / item2->weight;
+    if (r1 < r2) return 1;
+    else if (r1 > r2) return -1;
+    return 0;
+}
+
+double fractionalKnapsack(int W, struct Item arr[], int n) {
+    qsort(arr, n, sizeof(arr[0]), cmp);
+    int currentWeight = 0;
+    double finalValue = 0.0;
+    for (int i = 0; i < n; i++) {
+        if (currentWeight + arr[i].weight <= W) {
+            currentWeight += arr[i].weight;
+            finalValue += arr[i].value;
+        } else {
+            int remain = W - currentWeight;
+            finalValue += arr[i].value * ((double)remain / arr[i].weight);
+            break;
+        }
+    }
+    return finalValue;
+}
+
+int main() {
+    int W = 50;
+    struct Item arr[] = {{60, 10}, {100, 20}, {120, 30}};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    printf("Maximum value we can obtain = %f\n", fractionalKnapsack(W, arr, n));
+    return 0;
+}
+
+
+--- Python Implementation ---
+class Item:
+    def __init__(self, value, weight):
+        self.value = value
+        self.weight = weight
+
+def fractional_knapsack(W, arr):
+    arr.sort(key=lambda x: (x.value/x.weight), reverse=True)
+    final_value = 0.0
+    
+    for item in arr:
+        if W >= item.weight:
+            W -= item.weight
+            final_value += item.value
+        else:
+            final_value += item.value * (W / item.weight)
+            break
+            
+    return final_value
+
+if __name__ == "__main__":
+    W = 50
+    arr = [Item(60, 10), Item(100, 20), Item(120, 30)]
+    max_val = fractional_knapsack(W, arr)
+    print(f"Maximum value we can obtain = {max_val}")
+
+
+================================================================================
+7. Find the second largest and second smallest number simultaneously in an array using Divide & Conquer Principle.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <limits.h>
+
+struct Result {
+    int min, max, second_min, second_max;
+};
+
+struct Result findSecondMinMax(int arr[], int left, int right) {
+    struct Result res, left_res, right_res;
+    if (left == right) {
+        res.min = arr[left];
+        res.max = arr[left];
+        res.second_min = INT_MAX;
+        res.second_max = INT_MIN;
+        return res;
+    }
+    if (right == left + 1) {
+        if (arr[left] < arr[right]) {
+            res.min = arr[left];
+            res.second_min = arr[right];
+            res.max = arr[right];
+            res.second_max = arr[left];
+        } else {
+            res.min = arr[right];
+            res.second_min = arr[left];
+            res.max = arr[left];
+            res.second_max = arr[right];
+        }
+        return res;
+    }
+    int mid = (left + right) / 2;
+    left_res = findSecondMinMax(arr, left, mid);
+    right_res = findSecondMinMax(arr, mid + 1, right);
+    
+    // Merge min and max
+    if (left_res.min < right_res.min) {
+        res.min = left_res.min;
+        res.second_min = (left_res.second_min < right_res.min) ? left_res.second_min : right_res.min;
+    } else {
+        res.min = right_res.min;
+        res.second_min = (right_res.second_min < left_res.min) ? right_res.second_min : left_res.min;
+    }
+
+    if (left_res.max > right_res.max) {
+        res.max = left_res.max;
+        res.second_max = (left_res.second_max > right_res.max) ? left_res.second_max : right_res.max;
+    } else {
+        res.max = right_res.max;
+        res.second_max = (right_res.second_max > left_res.max) ? right_res.second_max : left_res.max;
+    }
+    return res;
+}
+
+int main() {
+    int arr[] = {12, 11, 35, 10, 34, 1};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    struct Result res = findSecondMinMax(arr, 0, n - 1);
+    printf("Second Minimum: %d\n", res.second_min);
+    printf("Second Maximum: %d\n", res.second_max);
+    return 0;
+}
+
+
+--- Python Implementation ---
+import sys
+
+class Result:
+    def __init__(self, min_val, max_val, sec_min, sec_max):
+        self.min = min_val
+        self.max = max_val
+        self.second_min = sec_min
+        self.second_max = sec_max
+
+def find_second_min_max(arr, left, right):
+    if left == right:
+        return Result(arr[left], arr[left], sys.maxsize, -sys.maxsize)
+    
+    if right == left + 1:
+        if arr[left] < arr[right]:
+            return Result(arr[left], arr[right], arr[right], arr[left])
+        else:
+            return Result(arr[right], arr[left], arr[left], arr[right])
+            
+    mid = (left + right) // 2
+    left_res = find_second_min_max(arr, left, mid)
+    right_res = find_second_min_max(arr, mid + 1, right)
+    
+    # merge logic
+    new_min = min(left_res.min, right_res.min)
+    new_sec_min = min(max(left_res.min, right_res.min), left_res.second_min, right_res.second_min)
+    
+    new_max = max(left_res.max, right_res.max)
+    new_sec_max = max(min(left_res.max, right_res.max), left_res.second_max, right_res.second_max)
+    
+    return Result(new_min, new_max, new_sec_min, new_sec_max)
+
+if __name__ == "__main__":
+    arr = [12, 11, 35, 10, 34, 1]
+    res = find_second_min_max(arr, 0, len(arr) - 1)
+    print(f"Second Minimum: {res.second_min}")
+    print(f"Second Maximum: {res.second_max}")
+
+
+================================================================================
+8. Given a sorted array and a number x, write a function that counts the occurrences of x in the array. Expected time complexity is O(logn).
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+int binarySearchFirst(int arr[], int left, int right, int x) {
+    if (right >= left) {
+        int mid = (left + right) / 2;
+        if ((mid == 0 || x > arr[mid - 1]) && arr[mid] == x) return mid;
+        else if (x > arr[mid]) return binarySearchFirst(arr, mid + 1, right, x);
+        else return binarySearchFirst(arr, left, mid - 1, x);
+    }
+    return -1;
+}
+
+int binarySearchLast(int arr[], int left, int right, int x, int n) {
+    if (right >= left) {
+        int mid = (left + right) / 2;
+        if ((mid == n - 1 || x < arr[mid + 1]) && arr[mid] == x) return mid;
+        else if (x < arr[mid]) return binarySearchLast(arr, left, mid - 1, x, n);
+        else return binarySearchLast(arr, mid + 1, right, x, n);
+    }
+    return -1;
+}
+
+int countOccurrences(int arr[], int n, int x) {
+    int first = binarySearchFirst(arr, 0, n - 1, x);
+    if (first == -1) return 0;
+    int last = binarySearchLast(arr, first, n - 1, x, n);
+    return last - first + 1;
+}
+
+int main() {
+    int arr[] = {1, 2, 2, 2, 2, 3, 4, 7, 8, 8};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int x = 2;
+    printf("Number of occurrences of %d is %d\n", x, countOccurrences(arr, n, x));
+    return 0;
+}
+
+
+--- Python Implementation ---
+def binary_search_first(arr, left, right, x, n):
+    if right >= left:
+        mid = (left + right) // 2
+        if (mid == 0 or x > arr[mid - 1]) and arr[mid] == x:
+            return mid
+        elif x > arr[mid]:
+            return binary_search_first(arr, mid + 1, right, x, n)
+        else:
+            return binary_search_first(arr, left, mid - 1, x, n)
+    return -1
+
+def binary_search_last(arr, left, right, x, n):
+    if right >= left:
+        mid = (left + right) // 2
+        if (mid == n - 1 or x < arr[mid + 1]) and arr[mid] == x:
+            return mid
+        elif x < arr[mid]:
+            return binary_search_last(arr, left, mid - 1, x, n)
+        else:
+            return binary_search_last(arr, mid + 1, right, x, n)
+    return -1
+
+def count_occurrences(arr, x):
+    n = len(arr)
+    first = binary_search_first(arr, 0, n - 1, x, n)
+    if first == -1:
+        return 0
+    last = binary_search_last(arr, first, n - 1, x, n)
+    return last - first + 1
+
+if __name__ == "__main__":
+    arr = [1, 2, 2, 2, 2, 3, 4, 7, 8, 8]
+    x = 2
+    print(f"Number of occurrences of {x} is {count_occurrences(arr, x)}")
+
+
+================================================================================
+9. Median of two sorted arrays: There are 2 sorted arrays A and B; each of size n. Write an algorithm to find the median of the array obtained after merging the above 2 arrays (i.e. array of length 2n). The complexity should be O(log(n)).
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+double getMedian(int arp1[], int arp2[], int n) {
+    int low = 0, high = n;
+    while (low <= high) {
+        int partition1 = (low + high) / 2;
+        int partition2 = n - partition1;
+
+        int maxLeft1 = (partition1 == 0) ? -1000000 : arp1[partition1 - 1];
+        int minRight1 = (partition1 == n) ? 1000000 : arp1[partition1];
+
+        int maxLeft2 = (partition2 == 0) ? -1000000 : arp2[partition2 - 1];
+        int minRight2 = (partition2 == n) ? 1000000 : arp2[partition2];
+
+        if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
+            return (MAX(maxLeft1, maxLeft2) + MIN(minRight1, minRight2)) / 2.0;
+        } else if (maxLeft1 > minRight2) {
+            high = partition1 - 1;
+        } else {
+            low = partition1 + 1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int ar1[] = {1, 12, 15, 26, 38};
+    int ar2[] = {2, 13, 17, 30, 45};
+    int n = sizeof(ar1) / sizeof(ar1[0]);
+    printf("Median is %f\n", getMedian(ar1, ar2, n));
+    return 0;
+}
+
+
+--- Python Implementation ---
+def get_median(arr1, arr2, n):
+    low = 0
+    high = n
+    
+    while low <= high:
+        partition1 = (low + high) // 2
+        partition2 = n - partition1
+        
+        max_left1 = float('-inf') if partition1 == 0 else arr1[partition1 - 1]
+        min_right1 = float('inf') if partition1 == n else arr1[partition1]
+        
+        max_left2 = float('-inf') if partition2 == 0 else arr2[partition2 - 1]
+        min_right2 = float('inf') if partition2 == n else arr2[partition2]
+        
+        if max_left1 <= min_right2 and max_left2 <= min_right1:
+            return (max(max_left1, max_left2) + min(min_right1, min_right2)) / 2.0
+        elif max_left1 > min_right2:
+            high = partition1 - 1
+        else:
+            low = partition1 + 1
+            
+    return -1
+
+if __name__ == "__main__":
+    ar1 = [1, 12, 15, 26, 38]
+    ar2 = [2, 13, 17, 30, 45]
+    n = len(ar1)
+    print(f"Median is {get_median(ar1, ar2, n)}")
+
+
+================================================================================
+10. Given an array of digits, sort them with time complexity O(n).
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <string.h>
+
+void sortDigits(int arr[], int n) {
+    int count[10] = {0};
+    int output[n];
+
+    for (int i = 0; i < n; i++)
+        count[arr[i]]++;
+
+    for (int i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[arr[i]] - 1] = arr[i];
+        count[arr[i]]--;
+    }
+
+    for (int i = 0; i < n; i++)
+        arr[i] = output[i];
+}
+
+int main() {
+    int arr[] = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    sortDigits(arr, n);
+    printf("Sorted digits: ");
+    for(int i=0; i<n; i++) printf("%d ", arr[i]);
+    printf("\n");
+    return 0;
+}
+
+
+--- Python Implementation ---
+def sort_digits(arr):
+    count = [0] * 10
+    output = [0] * len(arr)
+    
+    for digit in arr:
+        count[digit] += 1
+        
+    for i in range(1, 10):
+        count[i] += count[i - 1]
+        
+    for i in range(len(arr) - 1, -1, -1):
+        output[count[arr[i]] - 1] = arr[i]
+        count[arr[i]] -= 1
+        
+    for i in range(len(arr)):
+        arr[i] = output[i]
+
+if __name__ == "__main__":
+    arr = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3]
+    sort_digits(arr)
+    print("Sorted digits:", arr)
+
+
+================================================================================
+11. Find neighbors of the median element in an array using the partitioning strategy of the Quick-Sorting method.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+void swap(int* a, int* b) {
+    int t = *a; *a = *b; *b = t;
+}
+
+int partition(int arr[], int l, int r) {
+    int x = arr[r], i = l;
+    for (int j = l; j <= r - 1; j++) {
+        if (arr[j] <= x) {
+            swap(&arr[i], &arr[j]);
+            i++;
+        }
+    }
+    swap(&arr[i], &arr[r]);
+    return i;
+}
+
+int kthSmallest(int arr[], int l, int r, int k) {
+    if (k > 0 && k <= r - l + 1) {
+        int index = partition(arr, l, r);
+        if (index - l == k - 1) return arr[index];
+        if (index - l > k - 1) return kthSmallest(arr, l, index - 1, k);
+        return kthSmallest(arr, index + 1, r, k - index + l - 1);
+    }
+    return -1;
+}
+
+int main() {
+    int arr[] = {12, 3, 5, 7, 4, 19, 26};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    int k = n / 2 + 1; // Median
+    
+    int median = kthSmallest(arr, 0, n - 1, k);
+    
+    int leftNeighbor = -10000;
+    for (int i = 0; i < n / 2; i++) {
+        if (arr[i] > leftNeighbor) leftNeighbor = arr[i];
+    }
+    
+    int rightNeighbor = 10000;
+    for (int i = n / 2 + 1; i < n; i++) {
+        if (arr[i] < rightNeighbor) rightNeighbor = arr[i];
+    }
+
+    printf("Median: %d\n", median);
+    printf("Neighbors: %d and %d\n", leftNeighbor, rightNeighbor);
+    return 0;
+}
+
+
+--- Python Implementation ---
+def partition(arr, l, r):
+    x = arr[r]
+    i = l
+    for j in range(l, r):
+        if arr[j] <= x:
+            arr[i], arr[j] = arr[j], arr[i]
+            i += 1
+    arr[i], arr[r] = arr[r], arr[i]
+    return i
+
+def kth_smallest(arr, l, r, k):
+    if k > 0 and k <= r - l + 1:
+        index = partition(arr, l, r)
+        if index - l == k - 1:
+            return arr[index]
+        if index - l > k - 1:
+            return kth_smallest(arr, l, index - 1, k)
+        return kth_smallest(arr, index + 1, r, k - index + l - 1)
+    return -1
+
+if __name__ == "__main__":
+    arr = [12, 3, 5, 7, 4, 19, 26]
+    n = len(arr)
+    k = n // 2 + 1
+    
+    median = kth_smallest(arr, 0, n - 1, k)
+    left_neighbor = max(arr[:n//2]) if n//2 > 0 else None
+    right_neighbor = min(arr[n//2 + 1:]) if n//2 + 1 < n else None
+    
+    print(f"Median: {median}")
+    print(f"Neighbors: {left_neighbor} and {right_neighbor}")
+
+
+================================================================================
+12. Given an array p[] which represents the chain of matrices such that the i-th matrix Ai is of dimension p[i-1] x p[i]. We need to write a function that should return the optimal parenthesizing expression resulting in a minimum multiplication cost to multiply the chain.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <limits.h>
+
+int MatrixChainOrder(int p[], int n) {
+    int m[n][n];
+
+    for (int i = 1; i < n; i++)
+        m[i][i] = 0;
+
+    for (int L = 2; L < n; L++) {
+        for (int i = 1; i < n - L + 1; i++) {
+            int j = i + L - 1;
+            m[i][j] = INT_MAX;
+            for (int k = i; k <= j - 1; k++) {
+                int q = m[i][k] + m[k + 1][j] + p[i - 1] * p[k] * p[j];
+                if (q < m[i][j])
+                    m[i][j] = q;
+            }
+        }
+    }
+    return m[1][n - 1];
+}
+
+int main() {
+    int arr[] = {1, 2, 3, 4};
+    int size = sizeof(arr) / sizeof(arr[0]);
+    printf("Minimum number of multiplications is %d\n", MatrixChainOrder(arr, size));
+    return 0;
+}
+
+
+--- Python Implementation ---
+import sys
+
+def matrix_chain_order(p):
+    n = len(p)
+    m = [[0 for _ in range(n)] for _ in range(n)]
+    
+    for L in range(2, n):
+        for i in range(1, n - L + 1):
+            j = i + L - 1
+            m[i][j] = sys.maxsize
+            for k in range(i, j):
+                q = m[i][k] + m[k + 1][j] + p[i - 1] * p[k] * p[j]
+                if q < m[i][j]:
+                    m[i][j] = q
+                    
+    return m[1][n - 1]
+
+if __name__ == "__main__":
+    arr = [1, 2, 3, 4]
+    print(f"Minimum number of multiplications is {matrix_chain_order(arr)}")
+
+
+================================================================================
+13. Given weights and values of n items, put these items in a knapsack of capacity W to get the maximum total value in the knapsack. You cannot break an item, either pick the item, or don’t pick it.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+int max(int a, int b) { return (a > b) ? a : b; }
+
+int knapSack(int W, int wt[], int val[], int n) {
+    int i, w;
+    int K[n + 1][W + 1];
+
+    for (i = 0; i <= n; i++) {
+        for (w = 0; w <= W; w++) {
+            if (i == 0 || w == 0)
+                K[i][w] = 0;
+            else if (wt[i - 1] <= w)
+                K[i][w] = max(val[i - 1] + K[i - 1][w - wt[i - 1]], K[i - 1][w]);
+            else
+                K[i][w] = K[i - 1][w];
+        }
+    }
+    return K[n][W];
+}
+
+int main() {
+    int val[] = {60, 100, 120};
+    int wt[] = {10, 20, 30};
+    int W = 50;
+    int n = sizeof(val) / sizeof(val[0]);
+    printf("Maximum value: %d\n", knapSack(W, wt, val, n));
+    return 0;
+}
+
+
+--- Python Implementation ---
+def knapSack(W, wt, val, n):
+    K = [[0 for _ in range(W + 1)] for _ in range(n + 1)]
+    
+    for i in range(n + 1):
+        for w in range(W + 1):
+            if i == 0 or w == 0:
+                K[i][w] = 0
+            elif wt[i-1] <= w:
+                K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]], K[i-1][w])
+            else:
+                K[i][w] = K[i-1][w]
+
+    return K[n][W]
+
+if __name__ == "__main__":
+    val = [60, 100, 120]
+    wt = [10, 20, 30]
+    W = 50
+    n = len(val)
+    print(f"Maximum value: {knapSack(W, wt, val, n)}")
+
+
+================================================================================
+14. Implement the greedy algorithm to solve the problem of the Job Sequencing with deadlines.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+struct Job {
+    char id;
+    int dead;
+    int profit;
+};
+
+int compare(const void* a, const void* b) {
+    struct Job* temp1 = (struct Job*)a;
+    struct Job* temp2 = (struct Job*)b;
+    return (temp2->profit - temp1->profit);
+}
+
+void printJobScheduling(struct Job arr[], int n) {
+    qsort(arr, n, sizeof(struct Job), compare);
+
+    int result[n];
+    bool slot[n];
+    for (int i = 0; i < n; i++) slot[i] = false;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = (n < arr[i].dead ? n : arr[i].dead) - 1; j >= 0; j--) {
+            if (slot[j] == false) {
+                result[j] = i;
+                slot[j] = true;
+                break;
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+        if (slot[i])
+            printf("%c ", arr[result[i]].id);
+    printf("\n");
+}
+
+int main() {
+    struct Job arr[] = {{'a', 2, 100}, {'b', 1, 19}, {'c', 2, 27}, {'d', 1, 25}, {'e', 3, 15}};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    printf("Following is maximum profit sequence of jobs: \n");
+    printJobScheduling(arr, n);
+    return 0;
+}
+
+
+--- Python Implementation ---
+class Job:
+    def __init__(self, id, dead, profit):
+        self.id = id
+        self.dead = dead
+        self.profit = profit
+
+def print_job_scheduling(arr):
+    n = len(arr)
+    arr.sort(key=lambda x: x.profit, reverse=True)
+    
+    result = [False] * n
+    job_sequence = ['-1'] * n
+    
+    for i in range(len(arr)):
+        for j in range(min(n - 1, arr[i].dead - 1), -1, -1):
+            if not result[j]:
+                result[j] = True
+                job_sequence[j] = arr[i].id
+                break
+                
+    print("Following is maximum profit sequence of jobs: ")
+    print([job for job in job_sequence if job != '-1'])
+
+if __name__ == "__main__":
+    arr = [Job('a', 2, 100), Job('b', 1, 19), Job('c', 2, 27), Job('d', 1, 25), Job('e', 3, 15)]
+    print_job_scheduling(arr)
+
+
+================================================================================
+15. Implement a greedy algorithm for finding the single-source shortest paths. Suggest an algorithm if the given graph contains negative weights and non-negative weight cycle and implement it.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+struct Edge {
+    int src, dest, weight;
+};
+
+struct Graph {
+    int V, E;
+    struct Edge* edge;
+};
+
+struct Graph* createGraph(int V, int E) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->V = V;
+    graph->E = E;
+    graph->edge = (struct Edge*)malloc(E * sizeof(struct Edge));
+    return graph;
+}
+
+void BellmanFord(struct Graph* graph, int src) {
+    int V = graph->V;
+    int E = graph->E;
+    int dist[V];
+
+    for (int i = 0; i < V; i++)
+        dist[i] = INT_MAX;
+    dist[src] = 0;
+
+    for (int i = 1; i <= V - 1; i++) {
+        for (int j = 0; j < E; j++) {
+            int u = graph->edge[j].src;
+            int v = graph->edge[j].dest;
+            int weight = graph->edge[j].weight;
+            if (dist[u] != INT_MAX && dist[u] + weight < dist[v])
+                dist[v] = dist[u] + weight;
+        }
+    }
+
+    for (int i = 0; i < E; i++) {
+        int u = graph->edge[i].src;
+        int v = graph->edge[i].dest;
+        int weight = graph->edge[i].weight;
+        if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+            printf("Graph contains negative weight cycle\n");
+            return;
+        }
+    }
+
+    printf("Vertex Distance from Source\n");
+    for (int i = 0; i < V; i++)
+        printf("%d \t\t %d\n", i, dist[i]);
+}
+
+int main() {
+    int V = 5, E = 8;
+    struct Graph* graph = createGraph(V, E);
+
+    graph->edge[0].src = 0; graph->edge[0].dest = 1; graph->edge[0].weight = -1;
+    graph->edge[1].src = 0; graph->edge[1].dest = 2; graph->edge[1].weight = 4;
+    graph->edge[2].src = 1; graph->edge[2].dest = 2; graph->edge[2].weight = 3;
+    graph->edge[3].src = 1; graph->edge[3].dest = 3; graph->edge[3].weight = 2;
+    graph->edge[4].src = 1; graph->edge[4].dest = 4; graph->edge[4].weight = 2;
+    graph->edge[5].src = 3; graph->edge[5].dest = 2; graph->edge[5].weight = 5;
+    graph->edge[6].src = 3; graph->edge[6].dest = 1; graph->edge[6].weight = 1;
+    graph->edge[7].src = 4; graph->edge[7].dest = 3; graph->edge[7].weight = -3;
+
+    BellmanFord(graph, 0);
+    return 0;
+}
+
+
+--- Python Implementation ---
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = []
+
+    def add_edge(self, u, v, w):
+        self.graph.append([u, v, w])
+
+    def bellman_ford(self, src):
+        dist = [float("Inf")] * self.V
+        dist[src] = 0
+
+        for _ in range(self.V - 1):
+            for u, v, w in self.graph:
+                if dist[u] != float("Inf") and dist[u] + w < dist[v]:
+                    dist[v] = dist[u] + w
+
+        for u, v, w in self.graph:
+            if dist[u] != float("Inf") and dist[u] + w < dist[v]:
+                print("Graph contains negative weight cycle")
+                return
+
+        print("Vertex Distance from Source")
+        for i in range(self.V):
+            print(f"{i} \t\t {dist[i]}")
+
+if __name__ == "__main__":
+    g = Graph(5)
+    g.add_edge(0, 1, -1)
+    g.add_edge(0, 2, 4)
+    g.add_edge(1, 2, 3)
+    g.add_edge(1, 3, 2)
+    g.add_edge(1, 4, 2)
+    g.add_edge(3, 2, 5)
+    g.add_edge(3, 1, 1)
+    g.add_edge(4, 3, -3)
+
+    g.bellman_ford(0)
+
+
+================================================================================
+16. Apply Strassen’s Matrix Multiplication strategy for odd dimensional square matrices.
+================================================================================
+
+--- C Implementation ---
+// exp16_strassens.c
+#include <stdio.h>
+#include <stdlib.h>
+
+void addMat(int n, int** A, int** B, int** C) {
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            C[i][j] = A[i][j] + B[i][j];
+}
+void subMat(int n, int** A, int** B, int** C) {
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            C[i][j] = A[i][j] - B[i][j];
+}
+
+int** allocateMat(int n) {
+    int** mat = (int**)malloc(n * sizeof(int*));
+    for (int i = 0; i < n; i++)
+        mat[i] = (int*)calloc(n, sizeof(int));
+    return mat;
+}
+
+void strassen(int n, int** A, int** B, int** C) {
+    if (n == 1) {
+        C[0][0] = A[0][0] * B[0][0];
+        return;
+    }
+    int k = n / 2;
+    int **A11 = allocateMat(k), **A12 = allocateMat(k);
+    int **A21 = allocateMat(k), **A22 = allocateMat(k);
+    int **B11 = allocateMat(k), **B12 = allocateMat(k);
+    int **B21 = allocateMat(k), **B22 = allocateMat(k);
+    for (int i = 0; i < k; i++) {
+        for (int j = 0; j < k; j++) {
+            A11[i][j] = A[i][j]; A12[i][j] = A[i][j + k];
+            A21[i][j] = A[i + k][j]; A22[i][j] = A[i + k][j + k];
+            B11[i][j] = B[i][j]; B12[i][j] = B[i][j + k];
+            B21[i][j] = B[i + k][j]; B22[i][j] = B[i + k][j + k];
+        }
+    }
+
+    int **P1 = allocateMat(k), **P2 = allocateMat(k), **P3 = allocateMat(k);
+    int **P4 = allocateMat(k), **P5 = allocateMat(k), **P6 = allocateMat(k), **P7 = allocateMat(k);
+    int **T1 = allocateMat(k), **T2 = allocateMat(k);
+
+    addMat(k, A11, A22, T1); addMat(k, B11, B22, T2); strassen(k, T1, T2, P1);
+    addMat(k, A21, A22, T1); strassen(k, T1, B11, P2);
+    subMat(k, B12, B22, T1); strassen(k, A11, T1, P3);
+    subMat(k, B21, B11, T1); strassen(k, A22, T1, P4);
+    addMat(k, A11, A12, T1); strassen(k, T1, B22, P5);
+    subMat(k, A21, A11, T1); addMat(k, B11, B12, T2); strassen(k, T1, T2, P6);
+    subMat(k, A12, A22, T1); addMat(k, B21, B22, T2); strassen(k, T1, T2, P7);
+
+    for (int i = 0; i < k; i++) {
+        for (int j = 0; j < k; j++) {
+            C[i][j] = P1[i][j] + P4[i][j] - P5[i][j] + P7[i][j];
+            C[i][j + k] = P3[i][j] + P5[i][j];
+            C[i + k][j] = P2[i][j] + P4[i][j];
+            C[i + k][j + k] = P1[i][j] - P2[i][j] + P3[i][j] + P6[i][j];
+        }
+    }
+}
+
+int nextPowerOf2(int n) {
+    int p = 1;
+    while (p < n) p *= 2;
+    return p;
+}
+
+int main() {
+    int n = 3; // odd dimension
+    int m = nextPowerOf2(n);
+    int** A = allocateMat(m);
+    int** B = allocateMat(m);
+    int** C = allocateMat(m);
+    
+    int val = 1;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++) {
+            A[i][j] = val++; B[i][j] = 1;
+        }
+
+    strassen(m, A, B, C);
+
+    printf("Result array (top %dx%d):\n", n, n);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++)
+            printf("%d ", C[i][j]);
+        printf("\n");
+    }
+    return 0;
+}
+
+
+--- Python Implementation ---
+import numpy as np
+
+def strassen(A, B):
+    n = len(A)
+    if n == 1:
+        return [[A[0][0] * B[0][0]]]
+
+    k = n // 2
+    A11 = [row[:k] for row in A[:k]]
+    A12 = [row[k:] for row in A[:k]]
+    A21 = [row[:k] for row in A[k:]]
+    A22 = [row[k:] for row in A[k:]]
+
+    B11 = [row[:k] for row in B[:k]]
+    B12 = [row[k:] for row in B[:k]]
+    B21 = [row[:k] for row in B[k:]]
+    B22 = [row[k:] for row in B[k:]]
+
+    def add(M1, M2):
+        return [[M1[i][j] + M2[i][j] for j in range(len(M1))] for i in range(len(M1))]
+
+    def sub(M1, M2):
+        return [[M1[i][j] - M2[i][j] for j in range(len(M1))] for i in range(len(M1))]
+
+    P1 = strassen(add(A11, A22), add(B11, B22))
+    P2 = strassen(add(A21, A22), B11)
+    P3 = strassen(A11, sub(B12, B22))
+    P4 = strassen(A22, sub(B21, B11))
+    P5 = strassen(add(A11, A12), B22)
+    P6 = strassen(sub(A21, A11), add(B11, B12))
+    P7 = strassen(sub(A12, A22), add(B21, B22))
+
+    C11 = add(sub(add(P1, P4), P5), P7)
+    C12 = add(P3, P5)
+    C21 = add(P2, P4)
+    C22 = add(add(sub(P1, P2), P3), P6)
+
+    C = [[0 for _ in range(n)] for _ in range(n)]
+    for i in range(k):
+        for j in range(k):
+            C[i][j] = C11[i][j]
+            C[i][j + k] = C12[i][j]
+            C[i + k][j] = C21[i][j]
+            C[i + k][j + k] = C22[i][j]
+    return C
+
+def next_power_of_2(n):
+    p = 1
+    while p < n: p *= 2
+    return p
+
+if __name__ == "__main__":
+    n = 3
+    m = next_power_of_2(n)
+    A = [[0] * m for _ in range(m)]
+    B = [[0] * m for _ in range(m)]
+    
+    val = 1
+    for i in range(n):
+        for j in range(n):
+            A[i][j] = val
+            B[i][j] = 1
+            val += 1
+
+    C = strassen(A, B)
+    
+    print(f"Result array (top {n}x{n}):")
+    for i in range(n):
+        print(C[i][:n])
+
+
+================================================================================
+17. Given a cost 2D-matrix and a position (m, n), write a function that returns the minimum cost-path to reach (m, n) from (0, 0).
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+#define min(x, y) (((x) < (y)) ? (x) : (y))
+#define R 3
+#define C 3
+
+int minCost(int cost[R][C], int m, int n) {
+    int tc[R][C];
+    tc[0][0] = cost[0][0];
+
+    for (int i = 1; i <= m; i++)
+        tc[i][0] = tc[i - 1][0] + cost[i][0];
+
+    for (int j = 1; j <= n; j++)
+        tc[0][j] = tc[0][j - 1] + cost[0][j];
+
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            int mn = min(tc[i - 1][j - 1], tc[i - 1][j]);
+            tc[i][j] = min(mn, tc[i][j - 1]) + cost[i][j];
+        }
+    }
+    return tc[m][n];
+}
+
+int main() {
+    int cost[R][C] = {{1, 2, 3}, {4, 8, 2}, {1, 5, 3}};
+    printf("Minimum cost to reach (2,2) is %d\n", minCost(cost, 2, 2));
+    return 0;
+}
+
+
+--- Python Implementation ---
+def min_cost(cost, m, n):
+    R = len(cost)
+    C = len(cost[0])
+    tc = [[0 for _ in range(C)] for _ in range(R)]
+
+    tc[0][0] = cost[0][0]
+
+    for i in range(1, m + 1):
+        tc[i][0] = tc[i-1][0] + cost[i][0]
+
+    for j in range(1, n + 1):
+        tc[0][j] = tc[0][j-1] + cost[0][j]
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            tc[i][j] = min(tc[i-1][j-1], tc[i-1][j], tc[i][j-1]) + cost[i][j]
+
+    return tc[m][n]
+
+if __name__ == "__main__":
+    cost = [[1, 2, 3],
+            [4, 8, 2],
+            [1, 5, 3]]
+    print(f"Minimum cost to reach (2,2) is {min_cost(cost, 2, 2)}")
+
+
+================================================================================
+18. Given a value V and an infinite supply of coins of m-denominations {C1=1<C2<C3<..<Cm}, we want to make change for Rs. V. Apply DP strategy to find out the minimum number of coins to make the change?
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <limits.h>
+
+int minCoins(int coins[], int m, int V) {
+    int table[V + 1];
+    table[0] = 0;
+    for (int i = 1; i <= V; i++)
+        table[i] = INT_MAX;
+        
+    for (int i = 1; i <= V; i++) {
+        for (int j = 0; j < m; j++) {
+            if (coins[j] <= i) {
+                int sub_res = table[i - coins[j]];
+                if (sub_res != INT_MAX && sub_res + 1 < table[i])
+                    table[i] = sub_res + 1;
+            }
+        }
+    }
+    if (table[V] == INT_MAX)
+        return -1;
+    return table[V];
+}
+
+int main() {
+    int coins[] = {1, 5, 10, 25};
+    int m = sizeof(coins) / sizeof(coins[0]);
+    int V = 30;
+    printf("Minimum coins required is %d\n", minCoins(coins, m, V));
+    return 0;
+}
+
+
+--- Python Implementation ---
+import sys
+
+def min_coins(coins, V):
+    table = [0] + [sys.maxsize] * V
+    
+    for i in range(1, V + 1):
+        for coin in coins:
+            if coin <= i:
+                sub_res = table[i - coin]
+                if sub_res != sys.maxsize and sub_res + 1 < table[i]:
+                    table[i] = sub_res + 1
+                    
+    if table[V] == sys.maxsize:
+        return -1
+    return table[V]
+
+if __name__ == "__main__":
+    coins = [1, 5, 10, 25]
+    V = 30
+    print(f"Minimum coins required is {min_coins(coins, V)}")
+
+
+================================================================================
+19. Given a set of non-negative integers, and a value sum, determine if there is a subset of the given set with sum equal to given sum.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <stdbool.h>
+
+bool isSubsetSum(int set[], int n, int sum) {
+    bool subset[n + 1][sum + 1];
+
+    for (int i = 0; i <= n; i++)
+        subset[i][0] = true;
+    for (int i = 1; i <= sum; i++)
+        subset[0][i] = false;
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= sum; j++) {
+            if (j < set[i - 1])
+                subset[i][j] = subset[i - 1][j];
+            else
+                subset[i][j] = subset[i - 1][j] || subset[i - 1][j - set[i - 1]];
+        }
+    }
+    return subset[n][sum];
+}
+
+int main() {
+    int set[] = {3, 34, 4, 12, 5, 2};
+    int sum = 9;
+    int n = sizeof(set) / sizeof(set[0]);
+    if (isSubsetSum(set, n, sum))
+        printf("Found a subset with given sum\n");
+    else
+        printf("No subset with given sum\n");
+    return 0;
+}
+
+
+--- Python Implementation ---
+def is_subset_sum(set_arr, n, total_sum):
+    subset = [[False for _ in range(total_sum + 1)] for _ in range(n + 1)]
+
+    for i in range(n + 1):
+        subset[i][0] = True
+        
+    for i in range(1, total_sum + 1):
+        subset[0][i] = False
+
+    for i in range(1, n + 1):
+        for j in range(1, total_sum + 1):
+            if j < set_arr[i - 1]:
+                subset[i][j] = subset[i - 1][j]
+            else:
+                subset[i][j] = subset[i - 1][j] or subset[i - 1][j - set_arr[i - 1]]
+                
+    return subset[n][total_sum]
+
+if __name__ == "__main__":
+    set_arr = [3, 34, 4, 12, 5, 2]
+    total_sum = 9
+    n = len(set_arr)
+    if is_subset_sum(set_arr, n, total_sum):
+        print("Found a subset with given sum")
+    else:
+        print("No subset with given sum")
+
+
+================================================================================
+20. Implement DP strategy to solve the Traveling Salesman Problem (TSP).
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <limits.h>
+
+#define MAX 9999
+#define n 4
+
+int dist[n][n] = {
+    {0, 10, 15, 20},
+    {10, 0, 35, 25},
+    {15, 35, 0, 30},
+    {20, 25, 30, 0}
+};
+
+int dp[16][4];
+int VISITED_ALL = (1 << n) - 1;
+
+int tsp(int mask, int pos) {
+    if (mask == VISITED_ALL) {
+        return dist[pos][0];
+    }
+    if (dp[mask][pos] != -1) {
+        return dp[mask][pos];
+    }
+
+    int ans = MAX;
+    for (int city = 0; city < n; city++) {
+        if ((mask & (1 << city)) == 0) {
+            int newAns = dist[pos][city] + tsp(mask | (1 << city), city);
+            if (newAns < ans) ans = newAns;
+        }
+    }
+    return dp[mask][pos] = ans;
+}
+
+int main() {
+    for (int i = 0; i < (1 << n); i++) {
+        for (int j = 0; j < n; j++) {
+            dp[i][j] = -1;
+        }
+    }
+    printf("Minimum weight Hamiltonian Cycle (TSP) is: %d\n", tsp(1, 0));
+    return 0;
+}
+
+
+--- Python Implementation ---
+import sys
+
+dist = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+
+n = 4
+VISITED_ALL = (1 << n) - 1
+dp = [[-1] * n for _ in range(1 << n)]
+
+def tsp(mask, pos):
+    if mask == VISITED_ALL:
+        return dist[pos][0]
+    
+    if dp[mask][pos] != -1:
+        return dp[mask][pos]
+        
+    ans = sys.maxsize
+    for city in range(n):
+        if (mask & (1 << city)) == 0:
+            new_ans = dist[pos][city] + tsp(mask | (1 << city), city)
+            ans = min(ans, new_ans)
+            
+    dp[mask][pos] = ans
+    return ans
+
+if __name__ == "__main__":
+    print(f"Minimum weight Hamiltonian Cycle (TSP) is: {tsp(1, 0)}")
+
+
+================================================================================
+21. Implement all pairs of the Shortest path algorithms for a graph using Floyd Warshall’s strategy.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#define V 4
+#define INF 99999
+
+void printSolution(int dist[][V]) {
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            if (dist[i][j] == INF)
+                printf("%7s", "INF");
+            else
+                printf("%7d", dist[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void floydWarshall(int dist[][V]) {
+    for (int k = 0; k < V; k++) {
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (dist[i][k] + dist[k][j] < dist[i][j])
+                    dist[i][j] = dist[i][k] + dist[k][j];
+            }
+        }
+    }
+    printSolution(dist);
+}
+
+int main() {
+    int graph[V][V] = {
+        {0, 5, INF, 10},
+        {INF, 0, 3, INF},
+        {INF, INF, 0, 1},
+        {INF, INF, INF, 0}
+    };
+    floydWarshall(graph);
+    return 0;
+}
+
+
+--- Python Implementation ---
+V = 4
+INF = 99999
+
+def floyd_warshall(graph):
+    dist = list(map(lambda i: list(map(lambda j: j, i)), graph))
+
+    for k in range(V):
+        for i in range(V):
+            for j in range(V):
+                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+
+    print_solution(dist)
+
+def print_solution(dist):
+    for i in range(V):
+        for j in range(V):
+            if dist[i][j] == INF:
+                print(f"{'INF':>7}", end="")
+            else:
+                print(f"{dist[i][j]:>7}", end="")
+        print()
+
+if __name__ == "__main__":
+    graph = [
+        [0, 5, INF, 10],
+        [INF, 0, 3, INF],
+        [INF, INF, 0, 1],
+        [INF, INF, INF, 0]
+    ]
+    floyd_warshall(graph)
+
+
+================================================================================
+22. Students need to develop a software or tool using any language for Plagiarism Checker. The primary objective of this project is that they have to implement a data structure concept and algorithm and show us how they implement it.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <string.h>
+
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+int lcs(char *X, char *Y, int m, int n) {
+    int L[m + 1][n + 1];
+
+    for (int i = 0; i <= m; i++) {
+        for (int j = 0; j <= n; j++) {
+            if (i == 0 || j == 0)
+                L[i][j] = 0;
+            else if (X[i - 1] == Y[j - 1])
+                L[i][j] = L[i - 1][j - 1] + 1;
+            else
+                L[i][j] = MAX(L[i - 1][j], L[i][j - 1]);
+        }
+    }
+    return L[m][n];
+}
+
+int main() {
+    char doc1[] = "This is a simple text for plagiarism checking";
+    char doc2[] = "This is a simple string for plagiarism testing";
+    
+    int m = strlen(doc1);
+    int n = strlen(doc2);
+
+    int lcs_length = lcs(doc1, doc2, m, n);
+    double similarity = (2.0 * lcs_length) / (m + n) * 100.0;
+    
+    printf("Document 1: %s\n", doc1);
+    printf("Document 2: %s\n", doc2);
+    printf("Similarity: %.2f%%\n", similarity);
+
+    if (similarity > 50.0) {
+        printf("Result: Potential Plagiarism Detected.\n");
+    } else {
+        printf("Result: Unique content.\n");
+    }
+
+    return 0;
+}
+
+
+--- Python Implementation ---
+def lcs(X, Y):
+    m = len(X)
+    n = len(Y)
+    
+    L = [[0 for _ in range(n+1)] for _ in range(m+1)]
+
+    for i in range(m + 1):
+        for j in range(n + 1):
+            if i == 0 or j == 0:
+                L[i][j] = 0
+            elif X[i-1] == Y[j-1]:
+                L[i][j] = L[i-1][j-1] + 1
+            else:
+                L[i][j] = max(L[i-1][j], L[i][j-1])
+
+    return L[m][n]
+
+if __name__ == "__main__":
+    doc1 = "This is a simple text for plagiarism checking"
+    doc2 = "This is a simple string for plagiarism testing"
+    
+    lcs_length = lcs(doc1, doc2)
+    similarity = (2.0 * lcs_length) / (len(doc1) + len(doc2)) * 100.0
+    
+    print(f"Document 1: {doc1}")
+    print(f"Document 2: {doc2}")
+    print(f"Similarity: {similarity:.2f}%")
+    
+    if similarity > 50.0:
+        print("Result: Potential Plagiarism Detected.")
+    else:
+        print("Result: Unique content.")
+
+
+================================================================================
+23. Professor Sarkar thinks he has discovered a remarkable property of binary search trees. Suppose that the search for key k in a binary search tree ends up in a leaf. Consider three sets: A, the keys to the left of the search path; B, the keys on the search path; and C, the keys to the right of the search path. Professor Bunyan claims that any three keys a ∈ A, b ∈ B, and c ∈ C must satisfy a ≤ b ≤ c. Give a smallest possible counterexample to the professor’s claim.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+
+int main() {
+    printf("Binary Search Tree Counterexample:\n\n");
+    printf("Consider the following BST:\n");
+    printf("       10\n");
+    printf("      /  \\\n");
+    printf("     5    15\n");
+    printf("    / \\\n");
+    printf("   3   8\n");
+    printf("  /\n");
+    printf(" 2\n\n");
+    
+    printf("Let's search for the key 2.\n");
+    printf("The search path B will be: {10, 5, 3, 2}\n");
+    printf("The set of keys to the right of the search path C will be: {15, 8}\n");
+    printf("Because 8 is in the right subtree of 5, which is on the path.\n\n");
+    
+    printf("Professor claims that any b in B, c in C must satisfy b <= c.\n");
+    printf("Let b = 10 (which is in B) and c = 8 (which is in C).\n");
+    printf("Is 10 <= 8? No. 10 is greater than 8.\n");
+    printf("Therefore, this is a counterexample, and the claim is FALSE.\n");
+
+    return 0;
+}
+
+
+--- Python Implementation ---
+if __name__ == "__main__":
+    print("Binary Search Tree Counterexample:\n")
+    print("Consider the following BST:")
+    print("       10")
+    print("      /  \\")
+    print("     5    15")
+    print("    / \\")
+    print("   3   8")
+    print("  /")
+    print(" 2\n")
+    
+    print("Let's search for the key 2.")
+    print("The search path B will be: {10, 5, 3, 2}")
+    print("The set of keys to the right of the search path C will be: {15, 8}")
+    print("Because 8 is in the right subtree of 5, which is on the path.\n")
+    
+    print("Professor claims that any b in B, c in C must satisfy b <= c.")
+    print("Let b = 10 (which is in B) and c = 8 (which is in C).")
+    print("Is 10 <= 8? No. 10 is greater than 8.")
+    print("Therefore, this is a counterexample, and the claim is FALSE.")
+
+
+================================================================================
+24. KMP String Matching: Given a text txt[0..n-1] and a pattern pat[0..m-1], write a function search(char pat[], char txt[]) that prints all occurrences of pat[] in txt[]. You may assume that n > m. Text: A A B A A C A A D A A B A A B A Pattern: A A B A
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <string.h>
+
+void computeLPSArray(char* pat, int M, int* lps) {
+    int len = 0;
+    lps[0] = 0;
+    int i = 1;
+
+    while (i < M) {
+        if (pat[i] == pat[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        } else {
+            if (len != 0) {
+                len = lps[len - 1];
+            } else {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+}
+
+void KMPSearch(char* pat, char* txt) {
+    int M = strlen(pat);
+    int N = strlen(txt);
+    int lps[M];
+
+    computeLPSArray(pat, M, lps);
+
+    int i = 0, j = 0;
+    while (i < N) {
+        if (pat[j] == txt[i]) {
+            j++;
+            i++;
+        }
+        if (j == M) {
+            printf("Found pattern at index %d\n", i - j);
+            j = lps[j - 1];
+        } else if (i < N && pat[j] != txt[i]) {
+            if (j != 0)
+                j = lps[j - 1];
+            else
+                i = i + 1;
+        }
+    }
+}
+
+int main() {
+    char txt[] = "AABAACAADAABAABA";
+    char pat[] = "AABA";
+    KMPSearch(pat, txt);
+    return 0;
+}
+
+
+--- Python Implementation ---
+def computeLPSArray(pat, M, lps):
+    length = 0
+    lps[0] = 0
+    i = 1
+
+    while i < M:
+        if pat[i] == pat[length]:
+            length += 1
+            lps[i] = length
+            i += 1
+        else:
+            if length != 0:
+                length = lps[length - 1]
+            else:
+                lps[i] = 0
+                i += 1
+
+def KMPSearch(pat, txt):
+    M = len(pat)
+    N = len(txt)
+
+    lps = [0] * M
+    j = 0 
+
+    computeLPSArray(pat, M, lps)
+
+    i = 0 
+    while i < N:
+        if pat[j] == txt[i]:
+            i += 1
+            j += 1
+
+        if j == M:
+            print(f"Found pattern at index {i - j}")
+            j = lps[j - 1]
+
+        elif i < N and pat[j] != txt[i]:
+            if j != 0:
+                j = lps[j - 1]
+            else:
+                i += 1
+
+if __name__ == "__main__":
+    txt = "AABAACAADAABAABA"
+    pat = "AABA"
+    KMPSearch(pat, txt)
+
+
+================================================================================
+25. Implement a routine management system that will work for the next semester.
+================================================================================
+
+--- C Implementation ---
+#include <stdio.h>
+#include <string.h>
+
+struct Routine {
+    char day[20];
+    char time[20];
+    char subject[50];
+};
+
+void displayRoutine(struct Routine arr[], int n) {
+    printf("\n--- College Routine ---\n");
+    printf("%-10s | %-10s | %-15s\n", "Day", "Time", "Subject");
+    printf("---------------------------------------\n");
+    for (int i = 0; i < n; i++) {
+        printf("%-10s | %-10s | %-15s\n", arr[i].day, arr[i].time, arr[i].subject);
+    }
+}
+
+int main() {
+    struct Routine schedule[5];
+    
+    strcpy(schedule[0].day, "Monday");
+    strcpy(schedule[0].time, "10:00 AM");
+    strcpy(schedule[0].subject, "DAA Theory");
+    
+    strcpy(schedule[1].day, "Monday");
+    strcpy(schedule[1].time, "12:00 PM");
+    strcpy(schedule[1].subject, "DAA Lab");
+    
+    strcpy(schedule[2].day, "Tuesday");
+    strcpy(schedule[2].time, "09:00 AM");
+    strcpy(schedule[2].subject, "OS Theory");
+    
+    strcpy(schedule[3].day, "Wednesday");
+    strcpy(schedule[3].time, "11:00 AM");
+    strcpy(schedule[3].subject, "Computer Networks");
+    
+    strcpy(schedule[4].day, "Friday");
+    strcpy(schedule[4].time, "02:00 PM");
+    strcpy(schedule[4].subject, "AI Theory");
+    
+    displayRoutine(schedule, 5);
+
+    return 0;
+}
+
+
+--- Python Implementation ---
+class Routine:
+    def __init__(self, day, time, subject):
+        self.day = day
+        self.time = time
+        self.subject = subject
+
+def display_routine(schedule):
+    print("\n--- College Routine ---")
+    print(f"{'Day':<10} | {'Time':<10} | {'Subject':<15}")
+    print("-" * 40)
+    for r in schedule:
+        print(f"{r.day:<10} | {r.time:<10} | {r.subject:<15}")
+
+if __name__ == "__main__":
+    schedule = [
+        Routine("Monday", "10:00 AM", "DAA Theory"),
+        Routine("Monday", "12:00 PM", "DAA Lab"),
+        Routine("Tuesday", "09:00 AM", "OS Theory"),
+        Routine("Wednesday", "11:00 AM", "Computer Networks"),
+        Routine("Friday", "02:00 PM", "AI Theory")
+    ]
+    
+    display_routine(schedule)
+
+
